@@ -100,3 +100,18 @@ jobs:
     - name: Build aria2
       run: |
         make -j"$(nproc 2> /dev/null || sysctl -n hw.ncpu)" check
+    - name: Package build artifacts
+      run: |
+        artifact_name="metrix-${{ runner.os }}-${{ matrix.compiler }}-${{ matrix.crypto }}-${{ matrix.bittorrent }}"
+        mkdir -p artifacts
+        tar -czf "artifacts/${artifact_name}.tar.gz" \
+          src/aria2c \
+          src/.libs/aria2c \
+          src/.libs/libaria2* \
+          src/libaria2*.pc
+    - name: Upload build artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: metrix-${{ runner.os }}-${{ matrix.compiler }}-${{ matrix.crypto }}-${{ matrix.bittorrent }}
+        path: artifacts/*.tar.gz
+        if-no-files-found: error

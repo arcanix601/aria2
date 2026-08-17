@@ -74,6 +74,10 @@ ARIA2_ARG_DISABLE([metalink])
 ARIA2_ARG_DISABLE([websocket])
 ARIA2_ARG_DISABLE([epoll])
 ARIA2_ARG_ENABLE([libaria2])
+AC_ARG_ENABLE([libaria2-metrix],
+  AS_HELP_STRING([--enable-libaria2-metrix], [Enable Metrix C API wrapper over libaria2.]),
+  [enable_libaria2_metrix_requested=$enableval enable_libaria2_metrix=$enableval],
+  [enable_libaria2_metrix=no])
 ARIA2_ARG_ENABLE([werror])
 
 AC_ARG_WITH([ca-bundle],
@@ -1005,7 +1009,12 @@ if test "x$enable_websocket" = "xyes"; then
 fi
 AM_CONDITIONAL([ENABLE_WEBSOCKET], [test "x$enable_websocket" = "xyes"])
 
+if test "x$enable_libaria2_metrix" = "xyes"; then
+  enable_libaria2=yes
+fi
+
 AM_CONDITIONAL([ENABLE_LIBARIA2], [test "x$enable_libaria2" = "xyes"])
+AM_CONDITIONAL([ENABLE_LIBARIA2_METRIX], [test "x$enable_libaria2_metrix" = "xyes"])
 
 AC_SUBST([bashcompletiondir])
 
@@ -1114,6 +1123,7 @@ XML-RPC:        $enable_xml_rpc
 Message Digest: $use_md
 WebSocket:      $enable_websocket (CFLAGS='$WSLAY_CFLAGS' LIBS='$WSLAY_LIBS')
 Libaria2:       $enable_libaria2 (shared=${enable_shared} static=${enable_static})
+Libaria2 Metrix:$enable_libaria2_metrix
 bash_completion dir: $bashcompletiondir
 Static build:   $ARIA2_STATIC
 ])

@@ -689,6 +689,15 @@ SRCS += \
 	ApiCallbackDownloadEventListener.cc ApiCallbackDownloadEventListener.h\
 	aria2api.cc aria2api.h \
 	KeepRunningCommand.cc KeepRunningCommand.h
+
+if ENABLE_LIBARIA2_METRIX
+lib_LTLIBRARIES += libaria2_metrix.la
+libaria2_metrix_la_SOURCES = \
+	aria2_metrix.cc \
+	includes/aria2/aria2_metrix.h
+libaria2_metrix_la_CPPFLAGS = $(AM_CPPFLAGS) -DMETRIX_ARIA2_BUILD
+libaria2_metrix_la_LIBADD = libaria2.la
+endif # ENABLE_LIBARIA2_METRIX
 else # !ENABLE_LIBARIA2
 noinst_LTLIBRARIES = libaria2.la
 endif # !ENABLE_LIBARIA2
@@ -752,4 +761,3 @@ endif # !ENABLE_LIBARIA2
 AM_CFLAGS = @EXTRACFLAGS@
 
 AM_CXXFLAGS = @WARNCXXFLAGS@ @CXX1XCXXFLAGS@ @EXTRACXXFLAGS@
-
